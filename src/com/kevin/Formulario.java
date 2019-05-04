@@ -23,8 +23,9 @@ public class Formulario extends JFrame {
 	private static final int TANQUE = 0;
 	
 	
-	private JComboBox []comboBoxsTipoDeVehiculo;
+	private JComboBox []comboBoxVehiculo;
 	private JTextField [] textFieldsNombreVehiculo;
+	
 	private JPanel panelDeContenidos;
 	private JTextField textFieldJugador1;
 	private JTextField textFieldJugador2;
@@ -35,8 +36,11 @@ public class Formulario extends JFrame {
 	 * Create the frame.
 	 */
 	public Formulario() {
+		
+		comboBoxVehiculo= new JComboBox[6];
+		textFieldsNombreVehiculo= new JTextField[6];
+		setSize( 817, 618);
 		setLocationRelativeTo(null);
-		setBounds(100, 100, 817, 518);
 		panelDeContenidos = new JPanel();
 		panelDeContenidos.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelDeContenidos);
@@ -56,7 +60,7 @@ public class Formulario extends JFrame {
 		lblTipoDeJuego.setBounds(12, 27, 117, 17);
 		panelTipoJuego.add(lblTipoDeJuego);
 		
-		JComboBox comboBoxTipoJuego = new JComboBox();
+		JComboBox<String> comboBoxTipoJuego = new JComboBox<String>();
 		comboBoxTipoJuego.addItem("Jugador vs Jugador");
 		comboBoxTipoJuego.addItem("Jugador vs Computadora");
 		comboBoxTipoJuego.addItemListener(new ItemListener() {
@@ -74,6 +78,16 @@ public class Formulario extends JFrame {
 		comboBoxTipoJuego.setBounds(133, 22, 254, 26);
 		panelTipoJuego.add(comboBoxTipoJuego);
 		
+		JLabel esenario = new JLabel("Tamanio del Esenario");
+		esenario.setBounds(410, 27, 200, 17);
+		panelTipoJuego.add(esenario);
+		JComboBox<String> tipoEsenario = new JComboBox<String>();
+		tipoEsenario.addItem("4 x 4");
+		tipoEsenario.addItem("6 x 4");
+		tipoEsenario.addItem("8 x 9");
+		tipoEsenario.setBounds(590, 22, 150, 26);
+		panelTipoJuego.add(tipoEsenario);		
+		
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setBounds(12, 12, 49, 17);
 		panelJugador1.add(lblNombre);
@@ -87,15 +101,12 @@ public class Formulario extends JFrame {
 		panel_1.setBounds(12, 41, 243, 96);
 		panelJugador1.add(panel_1);
 		panel_1.setLayout(null);
-		
-		JComboBox comboBoxVehiculo1 = new JComboBox();
-		comboBoxVehiculo1.setBounds(12, 12, 206, 26);
-		panel_1.add(comboBoxVehiculo1);
-		comboBoxVehiculo1.addItem("Avion");
-		comboBoxVehiculo1.addItem("Tanque");
-		
-		textFieldsNombreVehiculo= new JTextField[6];
-		comboBoxsTipoDeVehiculo = new JComboBox[6];
+				
+		 comboBoxVehiculo [0]= new JComboBox<String>();
+		 comboBoxVehiculo [0].setBounds(12, 12, 206, 26);
+		panel_1.add( comboBoxVehiculo [0]);
+		 comboBoxVehiculo [0].addItem("Avion");
+		 comboBoxVehiculo [0].addItem("Tanque");
 		
 		textFieldsNombreVehiculo[0] = new JTextField();
 		textFieldsNombreVehiculo[0] .setBounds(12, 50, 206, 21);
@@ -107,11 +118,11 @@ public class Formulario extends JFrame {
 		panel_2.setBounds(267, 41, 243, 96);
 		panelJugador1.add(panel_2);
 		
-		JComboBox comboBoxVehiculo2 = new JComboBox();
-		comboBoxVehiculo2.addItem("Avion");
-		comboBoxVehiculo2.addItem("Tanque");
-		comboBoxVehiculo2.setBounds(12, 12, 206, 26);
-		panel_2.add(comboBoxVehiculo2);
+		 comboBoxVehiculo [1] = new JComboBox();
+		comboBoxVehiculo [1].addItem("Avion");
+		comboBoxVehiculo [1].addItem("Tanque");
+		comboBoxVehiculo [1].setBounds(12, 12, 206, 26);
+		panel_2.add(comboBoxVehiculo [1]);
 		
 		textFieldsNombreVehiculo[1]  = new JTextField();
 		textFieldsNombreVehiculo[1]  .setColumns(10);
@@ -123,11 +134,11 @@ public class Formulario extends JFrame {
 		panel_3.setBounds(522, 41, 243, 96);
 		panelJugador1.add(panel_3);
 		
-		JComboBox comboBoxVehiculo3 = new JComboBox();
-		comboBoxVehiculo3.setBounds(12, 12, 206, 26);
-		comboBoxVehiculo3.addItem("Avion");
-		comboBoxVehiculo3.addItem("Tanque");
-		panel_3.add(comboBoxVehiculo3);
+		comboBoxVehiculo [2] = new JComboBox();
+		comboBoxVehiculo [2].setBounds(12, 12, 206, 26);
+		comboBoxVehiculo [2].addItem("Avion");
+		comboBoxVehiculo [2].addItem("Tanque");
+		panel_3.add(comboBoxVehiculo [2]);
 		
 		textFieldsNombreVehiculo[2]   = new JTextField();
 		textFieldsNombreVehiculo[2].setColumns(10);
@@ -153,11 +164,11 @@ public class Formulario extends JFrame {
 		panel_4.setBounds(12, 41, 243, 96);
 		panelJugador2.add(panel_4);
 		
-		JComboBox comboBoxVehiculo4 = new JComboBox();
-		comboBoxVehiculo4.setBounds(12, 12, 206, 26);
-		comboBoxVehiculo4.addItem("Avion");
-		comboBoxVehiculo4.addItem("Tanque");
-		panel_4.add(comboBoxVehiculo4);
+		comboBoxVehiculo [3] = new JComboBox();
+		comboBoxVehiculo [3].setBounds(12, 12, 206, 26);
+		comboBoxVehiculo [3].addItem("Avion");
+		comboBoxVehiculo [3].addItem("Tanque");
+		panel_4.add(comboBoxVehiculo [3]);
 		
 		textFieldsNombreVehiculo[3] = new JTextField();
 		textFieldsNombreVehiculo[3] .setColumns(10);
@@ -169,11 +180,11 @@ public class Formulario extends JFrame {
 		panel_5.setBounds(267, 41, 243, 96);
 		panelJugador2.add(panel_5);
 		
-		JComboBox comboBoxVehiculo5 = new JComboBox();
-		comboBoxVehiculo5.setBounds(12, 12, 206, 26);
-		comboBoxVehiculo5.addItem("Avion");
-		comboBoxVehiculo5.addItem("Tanque");
-		panel_5.add(comboBoxVehiculo5);
+		comboBoxVehiculo [4] = new JComboBox();
+		comboBoxVehiculo [4].setBounds(12, 12, 206, 26);
+		comboBoxVehiculo [4].addItem("Avion");
+		comboBoxVehiculo [4].addItem("Tanque");
+		panel_5.add(comboBoxVehiculo [4]);
 		
 		textFieldsNombreVehiculo[4]  = new JTextField();
 		textFieldsNombreVehiculo[4].setColumns(10);
@@ -185,11 +196,11 @@ public class Formulario extends JFrame {
 		panel_6.setBounds(522, 41, 243, 96);
 		panelJugador2.add(panel_6);
 		
-		JComboBox comboBoxVehiculo6 = new JComboBox();
-		comboBoxVehiculo6.setBounds(12, 12, 206, 26);
-		comboBoxVehiculo6.addItem("Avion");
-		comboBoxVehiculo6.addItem("Tanque");
-		panel_6.add(comboBoxVehiculo6);
+		comboBoxVehiculo [5] = new JComboBox();
+		comboBoxVehiculo [5].setBounds(12, 12, 206, 26);
+		comboBoxVehiculo [5].addItem("Avion");
+		comboBoxVehiculo [5].addItem("Tanque");
+		panel_6.add(comboBoxVehiculo [5]);
 		
 		textFieldsNombreVehiculo[5] = new JTextField();
 		textFieldsNombreVehiculo[5].setColumns(10);
@@ -204,12 +215,8 @@ public class Formulario extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(comboBoxTipoJuego.getSelectedIndex()==JUGADOR_vs_JUGADOR) {
-
-				}
-				if(comboBoxTipoJuego.getSelectedIndex()==JUGADOR_vs_JUGADOR) {
-					//comboBoxs = new JComboBox[3];
-				}
+				new Juego(comboBoxTipoJuego, tipoEsenario, textFieldJugador1,textFieldJugador2,comboBoxVehiculo,textFieldsNombreVehiculo);
+				setVisible(false);
 			}
 		});
 		btnAceptar.setBounds(548, 12, 105, 27);

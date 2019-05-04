@@ -193,7 +193,8 @@ public class Vehiculo {
 	public Vehiculo(String nombre) {
 		super();
 		armas = new Arma[1];
-		this.armas[0] = armas[0].getArmaBasica();
+		Arma arma= new Arma();
+		this.armas[0] = arma.getArmaBasica();
 		this.imagen = getDefaultIcon();
 		this.estado = true; 
 		this.cantidadEnemigosDestruidos = 0;

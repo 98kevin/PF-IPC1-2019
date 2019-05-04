@@ -1,10 +1,12 @@
 package com.kevin;
 
+import java.util.ArrayList;
+
 public class Jugador {
 	
 	private String nombre ;
 	private int cantidadDeOro;
-	private Vehiculo vehiculos[];
+	private  ArrayList<Vehiculo> vehiculos;
 	private int puntosDeVida;
 	private int puntosDePoder;
 	private Batalla batallas[];
@@ -39,13 +41,13 @@ public class Jugador {
 	/**
 	 * @return the vehiculos
 	 */
-	public Vehiculo []getVehiculos() {
+	public ArrayList getVehiculos() {
 		return vehiculos;
 	}
 	/**
 	 * @param vehiculos the vehiculos to set
 	 */
-	public void setVehiculos(Vehiculo vehiculos[]) {
+	public void setVehiculos(ArrayList vehiculos) {
 		this.vehiculos = vehiculos;
 	}
 	/**
@@ -125,7 +127,7 @@ public class Jugador {
 	 * @param cantidadDeOro
 	 * @param vehiculos
 	 */
-	public Jugador(String nombre,Vehiculo[] vehiculos) {
+	public Jugador(String nombre,ArrayList<Vehiculo> vehiculos) {
 		super();
 		this.nombre = nombre;
 		this.cantidadDeOro = 10;
@@ -135,7 +137,7 @@ public class Jugador {
 		this.batallas=null;
 		this.contadorDeBatallas=0;
 		this.vehiculos=vehiculos;
-		this.vehiculoUsando=vehiculos[0];
+		this.vehiculoUsando=vehiculos.get(0); //el primer vehiculo es el que esta usando. 
 		this.reparadoresPontenciales=null;
 	}
 	

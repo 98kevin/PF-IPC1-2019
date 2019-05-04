@@ -73,7 +73,10 @@ public class main extends JFrame{
 				Formulario frame = new Formulario();
 				frame.setVisible(true);
 			}
-			
+			if(e.getSource().equals(cargarPartida)) {
+				Esenario frame = new Esenario();
+				frame.setVisible(true);
+			}
 		}
 		
 	}
