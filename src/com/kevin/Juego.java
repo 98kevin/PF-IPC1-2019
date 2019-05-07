@@ -10,10 +10,13 @@ public class Juego {
 
 	static final int JUGADOR_JUGADOR=0;
 	static final int JUGADOR_PC=1;
+	
 	static final int ES_4X4=0;
 	static final int ES_6X4=1;
 	static final int ES_8X9=2;
 	
+	static final int AVION = 0;
+	static final int TANQUE = 1;
 	
 	private int tipoJuego;
 	private Jugador jugadores[];
@@ -21,9 +24,7 @@ public class Juego {
 	private Jugador gamer2;
 	private int tipoEsenario;
 	
-	public Juego() {
-		new Formulario();
-	}
+	public Juego() {}
 	
 	public Juego (Jugador [] jugador) {
 		this.jugadores=jugador;
@@ -76,6 +77,7 @@ public class Juego {
 			jugadores[0]= gamer1;
 		}
 		JOptionPane.showMessageDialog(null, "Datos Cargados exitosamente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+		new Esenario(this);
 	}
 	
 	/**

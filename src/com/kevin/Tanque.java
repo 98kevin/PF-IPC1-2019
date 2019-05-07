@@ -1,6 +1,5 @@
 package com.kevin;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public final class Tanque extends Vehiculo{
@@ -13,7 +12,7 @@ public final class Tanque extends Vehiculo{
 		// TODO Auto-generated constructor stub
 	}
 
-	protected Icon getDefaultIcon() {
-		return new ImageIcon("tanque64.png");
+	protected ImageIcon getDefaultIcon() {
+		return new ImageIcon("Iconos/tanque32.png");
 	}
 }

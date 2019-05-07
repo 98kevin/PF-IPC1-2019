@@ -18,36 +18,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.awt.GridLayout;
+import javax.swing.JRadioButton;
 
 public class Esenario extends JFrame {
 
-	protected static final int CARAS_DADO_COMODIN = 4;
-	protected static final int CARAS_DADO_ATAQUE = 100;
-	protected static final int CARAS_DADO_MOVIMIENTO = 6;
+	private static final int CARAS_DADO_COMODIN = 4;
+	private static final int CARAS_DADO_ATAQUE = 100;
+	private static final int CARAS_DADO_MOVIMIENTO = 6;
+	
 	private JPanel contentPane;
 	private Random random;
 	private int resultadoDado;
 	
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Esenario frame = new Esenario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public Esenario() {
+	public Esenario(Juego juego) {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 1175, 448);
 		
@@ -86,65 +73,25 @@ public class Esenario extends JFrame {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_2.setBounds(114, 88, 399, 143);
+		panel_2.setBounds(114, 178, 399, 98);
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
 		
-		JLabel label_1 = new JLabel("<Jugador1>");
-		label_1.setBounds(12, 12, 118, 17);
-		panel_2.add(label_1);
+		JLabel etqJugador1 = new JLabel();
+		etqJugador1.setText(juego.getGamer1().getNombre());
+		etqJugador1.setBounds(12, 12, 118, 17);
+		panel_2.add(etqJugador1);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_3.setBounds(114, 243, 399, 143);
+		panel_3.setBounds(114, 288, 399, 98);
 		panel_1.add(panel_3);
 		panel_3.setLayout(null);
 		
-		JLabel label_2 = new JLabel("<Jugador2>");
-		label_2.setBounds(12, 12, 88, 17);
-		panel_3.add(label_2);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_4.setBounds(114, 12, 399, 60);
-		panel_1.add(panel_4);
-		panel_4.setLayout(null);
-		
-		JLabel lblArmas = new JLabel("Armas");
-		lblArmas.setBounds(12, 0, 60, 17);
-		panel_4.add(lblArmas);
-		
-		JLabel label_3 = new JLabel("<VehiculoUsando>");
-		label_3.setBounds(84, 0, 136, 17);
-		panel_4.add(label_3);
-		
-		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setBounds(12, 23, 42, 33);
-		panel_4.add(btnNewButton_1);
-		
-		JButton button_2 = new JButton("");
-		button_2.setBounds(66, 23, 42, 33);
-		panel_4.add(button_2);
-		
-		JButton button_3 = new JButton("");
-		button_3.setBounds(120, 23, 42, 33);
-		panel_4.add(button_3);
-		
-		JButton button_4 = new JButton("");
-		button_4.setBounds(174, 23, 42, 33);
-		panel_4.add(button_4);
-		
-		JButton button_5 = new JButton("");
-		button_5.setBounds(228, 23, 42, 33);
-		panel_4.add(button_5);
-		
-		JButton button_6 = new JButton("");
-		button_6.setBounds(282, 23, 42, 33);
-		panel_4.add(button_6);
-		
-		JButton button_7 = new JButton("");
-		button_7.setBounds(336, 23, 42, 33);
-		panel_4.add(button_7);
+		JLabel etqJugador2 = new JLabel();
+		etqJugador2.setText(juego.getGamer2().getNombre());
+		etqJugador2.setBounds(12, 12, 88, 17);
+		panel_3.add(etqJugador2);
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
@@ -204,6 +151,21 @@ public class Esenario extends JFrame {
 		JLabel lblResultado = new JLabel("Resultado");
 		lblResultado.setBounds(12, 254, 60, 17);
 		panel_5.add(lblResultado);
+		
+		JLabel lblArmas = new JLabel("Armas");
+		lblArmas.setBounds(114, 18, 49, 41);
+		panel_1.add(lblArmas);
+		
+		JLabel label_3 = new JLabel("<VehiculoUsando>");
+		label_3.setBounds(175, 18, 318, 41);
+		panel_1.add(label_3);
+		
+		JPanel panelDeArmas = new JPanel();
+		panelDeArmas.setBounds(114, 54, 399, 112);
+		panel_1.add(panelDeArmas);
+		panelDeArmas.setLayout(new GridLayout(3, 6, 0, 0));
+		
+		
 		
 	}
 }

@@ -1,5 +1,7 @@
 package com.kevin;
 
-public class Batalla {
+import java.io.Serializable;
+
+public class Batalla implements Serializable{
 
 }

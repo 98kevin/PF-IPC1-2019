@@ -1,0 +1,112 @@
+package com.kevin;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
+
+public class FormularioDeJuego extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					FormularioDeJuego frame = new FormularioDeJuego();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public FormularioDeJuego() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 451, 445);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.GRAY);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel lblTituloDelFormulario = new JLabel("FORMULARIO DE JUEGO");
+		lblTituloDelFormulario.setFont(new Font("Dialog", Font.BOLD, 21));
+		lblTituloDelFormulario.setBounds(34, 12, 367, 17);
+		contentPane.add(lblTituloDelFormulario);
+		
+		JLabel lblTipoDeJuego = new JLabel("Tipo de Juego");
+		lblTipoDeJuego.setForeground(Color.WHITE);
+		lblTipoDeJuego.setBounds(34, 54, 105, 17);
+		contentPane.add(lblTipoDeJuego);
+		
+		JComboBox comboBoxTipoDeJuego = new JComboBox();
+		comboBoxTipoDeJuego.setBounds(157, 49, 118, 26);
+		contentPane.add(comboBoxTipoDeJuego);
+		
+		JLabel lblPrimerJugador = new JLabel("Primer Jugador");
+		lblPrimerJugador.setForeground(Color.WHITE);
+		lblPrimerJugador.setBounds(34, 109, 105, 17);
+		contentPane.add(lblPrimerJugador);
+		
+		JLabel lblSegundoJugador = new JLabel("Segundo Jugador");
+		lblSegundoJugador.setForeground(Color.WHITE);
+		lblSegundoJugador.setBounds(34, 159, 126, 17);
+		contentPane.add(lblSegundoJugador);
+		
+		JLabel lblEsenario = new JLabel("Esenario");
+		lblEsenario.setForeground(Color.WHITE);
+		lblEsenario.setBounds(34, 216, 60, 17);
+		contentPane.add(lblEsenario);
+		
+		JComboBox comboBoxJugador1 = new JComboBox();
+		comboBoxJugador1.setBounds(157, 109, 182, 26);
+		new Jugador().agregarItemsDeJugadores(comboBoxJugador1);
+		contentPane.add(comboBoxJugador1);
+		
+		JComboBox comboBoxJugador2 = new JComboBox();
+		comboBoxJugador2.setBounds(157, 154, 182, 26);
+		new Jugador().agregarItemsDeJugadores(comboBoxJugador2);
+		contentPane.add(comboBoxJugador2);
+		
+		JComboBox comboBoxEsenario = new JComboBox();
+		comboBoxEsenario.setBounds(112, 211, 163, 26);
+		contentPane.add(comboBoxEsenario);
+		
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.setIcon(new ImageIcon("Iconos/aceptar.png"));
+		btnAceptar.setBackground(Color.DARK_GRAY);
+		btnAceptar.setForeground(Color.WHITE);
+		btnAceptar.setBounds(48, 334, 148, 49);
+		contentPane.add(btnAceptar);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setIcon(new ImageIcon("Iconos/cancelar.png"));
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnCancelar.setBackground(Color.DARK_GRAY);
+		btnCancelar.setForeground(Color.WHITE);
+		btnCancelar.setBounds(208, 334, 163, 49);
+		contentPane.add(btnCancelar);
+	}
+
+}

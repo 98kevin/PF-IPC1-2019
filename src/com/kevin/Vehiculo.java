@@ -1,14 +1,21 @@
 package com.kevin;
 
-import javax.swing.Icon;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-public class Vehiculo {
+import javax.swing.ImageIcon;
 
+public class Vehiculo implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2L;
 	protected int ataque;
 	protected int defensa;
 	protected double punteria;
 	protected String nombre;
-	protected Icon imagen;
+	protected ImageIcon imagen;
 	protected boolean estado;  //True significa estar activo: false, destruido. 
 	protected int cantidadEnemigosDestruidos;
 	protected int numeroVecesDestruido;
@@ -18,7 +25,7 @@ public class Vehiculo {
 	protected int experiencia;
 	protected int fila;
 	protected int columna;
-	protected Arma armas[];
+	protected ArrayList<Arma> armas;
 
 	/**
 	 * @return the ataque
@@ -71,13 +78,13 @@ public class Vehiculo {
 	/**
 	 * @return the imagen
 	 */
-	public Icon getImagen() {
+	public ImageIcon getImagen() {
 		return imagen;
 	}
 	/**
 	 * @param imagen the imagen to set
 	 */
-	public void setImagen(Icon imagen) {
+	public void setImagen(ImageIcon imagen) {
 		this.imagen = imagen;
 	}
 	/**
@@ -189,12 +196,9 @@ public class Vehiculo {
 		this.columna = columna;
 	}	
 
-	
 	public Vehiculo(String nombre) {
 		super();
-		armas = new Arma[1];
-		Arma arma= new Arma();
-		this.armas[0] = arma.getArmaBasica();
+		armas.add(new Arma().getArmaBasica());
 		this.imagen = getDefaultIcon();
 		this.estado = true; 
 		this.cantidadEnemigosDestruidos = 0;
@@ -202,12 +206,9 @@ public class Vehiculo {
 		this.puntosDeVida=100;
 		this.puntosDePoder=3+2*nivel;
 		this.experiencia=0;
-		this.fila=fila;
-		this.columna=columna;
 	}
 	
-	
-	protected Icon getDefaultIcon() {
+	protected ImageIcon getDefaultIcon() {
 		return null;
 	}
 }

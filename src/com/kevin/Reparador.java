@@ -1,5 +1,7 @@
 package com.kevin;
 
-public class Reparador {
+import java.io.Serializable;
+
+public class Reparador implements Serializable{
 
 }

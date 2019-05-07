@@ -1,15 +1,21 @@
 package com.kevin;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Arma {
+public class Arma implements Serializable{
 
 	private static final int MUNICIONES_INICIALES = 10;
 	private static final int NUMERO_ARMAS_BASICAS=3;
 	private static final int PRECIO_AMETRALLADORA = 5;
 	private static final int PRECIO_GRANADA = 8;
 	private static final int PRECIO_BOMBA_NUCLEAR = 12;
-	private  Arma armasBasicas[];
+	
+	private static final String CARPETA_DE_ARMAS="Armas/";
+	private static final String EXTENSION = ".wpn";  //De Weapon
+	private static final String CONTADOR_DE_ARMAS="contadorDeArmas"+".ctr";
+	
+	private static int contadorDeArmas=0;
 	
 	private String nombre;
 	private int ataque;
@@ -107,12 +113,24 @@ public class Arma {
 	 * @return Un arma basica
 	 */
 	public  Arma getArmaBasica() {
-		armasBasicas= new Arma[3];
-		armasBasicas[0]= new Arma("Ametralladora", 20,80,PRECIO_AMETRALLADORA);
-		armasBasicas[1]= new Arma("Granada", 30,60,PRECIO_GRANADA);
-		armasBasicas[2]=	new  Arma("Bomba Nucelar", 40,90,PRECIO_BOMBA_NUCLEAR);	
-		Random aleatorio = new Random();
-		return armasBasicas[aleatorio.nextInt(NUMERO_ARMAS_BASICAS)];
+			int numero= new Random().nextInt(NUMERO_ARMAS_BASICAS);
+			Arma armaRetorno = (Arma) Archivos.leerObjeto("arma"+String.valueOf(numero)+EXTENSION);
+			return armaRetorno; //Se le suma una unidad ya que no existe un archivo arma0.wpn
+	}
+	
+	public void escribirArmasBasicas() {
+		Arma arma1= new Arma("Ametralladora", 20,80,PRECIO_AMETRALLADORA);
+		Archivos.escribirObjeto(arma1,getDireccion());
+		Arma arma2= new Arma("Granada", 30,60,PRECIO_GRANADA);
+		Archivos.escribirObjeto(arma2,getDireccion());
+		Arma arma3=	new  Arma("Bomba Nucelar", 40,90,PRECIO_BOMBA_NUCLEAR);	
+		Archivos.escribirObjeto(arma3,getDireccion());
+	}
+	
+	private String getDireccion() {
+		contadorDeArmas++;
+		Archivos.escribirObjeto(new Integer(contadorDeArmas),CONTADOR_DE_ARMAS);
+		return "arma"+contadorDeArmas+EXTENSION;
 	}
 	
 }

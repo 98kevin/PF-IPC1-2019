@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,6 +24,7 @@ public class FormularioDeArmas extends JFrame {
 	private JTextField textFieldPunteria;
 	private JTextField textFieldPrecio;
 
+	private String nombreDeImagen;
 	/**
 	 * Launch the application.
 	 */
@@ -97,6 +99,10 @@ public class FormularioDeArmas extends JFrame {
 		lblImagen.setBounds(239, 91, 60, 17);
 		contentPane.add(lblImagen);
 		
+		JLabel labelImagen = new JLabel("");
+		labelImagen.setBounds(305, 140, 36, 32);
+		contentPane.add(labelImagen);
+		
 		JButton btnSeleccionar = new JButton("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -106,16 +112,39 @@ public class FormularioDeArmas extends JFrame {
 			    chooser.setFileFilter(filter);
 			    int returnVal = chooser.showOpenDialog(null);
 			    if(returnVal == JFileChooser.APPROVE_OPTION) {
-			       System.out.println("You chose to open this file: " +
-			            chooser.getSelectedFile().getName());
+			     nombreDeImagen= chooser.getSelectedFile().getName();
+			     	labelImagen.setIcon(new ImageIcon(nombreDeImagen));
 			    }
 			}
 		});
 		btnSeleccionar.setBounds(305, 86, 105, 27);
 		contentPane.add(btnSeleccionar);
 		
-		JLabel label = new JLabel("");
-		label.setBounds(305, 140, 36, 32);
-		contentPane.add(label);
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new Arma(textFieldNombre.getText(),Integer.parseInt(textFieldAtaque.getText()),
+							Integer.parseInt(textFieldPunteria.getText()), Integer.parseInt(textFieldPrecio.getText()));
+					JOptionPane.showMessageDialog(null, "Arma agregada exitosamente");
+					setVisible(false);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Error al ingresar el los datos numericos","Error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnAceptar.setBounds(87, 211, 105, 27);
+		contentPane.add(btnAceptar);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+		btnCancelar.setBounds(253, 211, 105, 27);
+		contentPane.add(btnCancelar);
+		
+		setVisible(true);
 	}
 }

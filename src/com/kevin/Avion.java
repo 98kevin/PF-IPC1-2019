@@ -24,7 +24,7 @@ public final class Avion extends Vehiculo{
 		velocidadDeDisparo=1;
 	}
 
-	protected Icon getDefaultIcon() {
-		return new ImageIcon("avion-de-guerra64.png");
+	protected ImageIcon getDefaultIcon() {
+		return new ImageIcon("Iconos/avion32.png");
 	}
 }

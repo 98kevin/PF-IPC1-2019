@@ -1,8 +1,16 @@
 package com.kevin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Jugador {
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
+public class Jugador implements Serializable{
+	
+	private static int contadorDeJugadores=0;
+	private static final String CONTADOR_DE_JUGADORES="ContadorDeJugadores.ctr";
+	private static final String EXTENSION = ".gmr";
 	
 	private String nombre ;
 	private int cantidadDeOro;
@@ -13,6 +21,45 @@ public class Jugador {
 	private int contadorDeBatallas;
 	private Vehiculo vehiculoUsando;
 	private Reparador [] reparadoresPontenciales;
+	
+	public Jugador() {}
+	
+	/**
+	 * @param nombre
+	 * @param cantidadDeOro
+	 * @param vehiculos
+	 */
+	public Jugador(String nombre,ArrayList<Vehiculo> vehiculos) {
+		super();
+		this.nombre = nombre;
+		this.cantidadDeOro = 10;
+		this.vehiculos = null;
+		this.puntosDeVida=50;
+		this.puntosDePoder=3;
+		this.batallas=null;
+		this.contadorDeBatallas=0;
+		this.vehiculos=vehiculos;
+		this.vehiculoUsando=vehiculos.get(0); //el primer vehiculo es el que esta usando. 
+		this.reparadoresPontenciales=null;
+		Archivos.escribirObjeto(this, getDireccion());
+	}
+
+	public Jugador(String nombreJugador,String nombreVehiculo1, int vehiculo1,String nombreVehiculo2, int vehiculo2, String nombreVehiculo3,int vehiculo3) {
+		ArrayList<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
+		if(vehiculo1==Juego.AVION)
+		vehiculos.add(new Avion(nombreVehiculo1));
+		if(vehiculo1==Juego.TANQUE)
+			vehiculos.add(new Tanque(nombreVehiculo1));
+		if(vehiculo2==Juego.AVION)
+			vehiculos.add(new Avion(nombreVehiculo2));
+		if(vehiculo2==Juego.TANQUE)
+			vehiculos.add(new Tanque(nombreVehiculo2));
+		if(vehiculo3==Juego.AVION)
+			vehiculos.add(new Avion(nombreVehiculo3));
+		if(vehiculo3==Juego.TANQUE)
+			vehiculos.add(new Tanque(nombreVehiculo3));
+		new Jugador(nombreJugador,vehiculos);
+	}
 	
 	/**
 	 * @return the nombre
@@ -122,23 +169,28 @@ public class Jugador {
 	public void setReparadoresPontenciales(Reparador[] reparadoresPontenciales) {
 		this.reparadoresPontenciales = reparadoresPontenciales;
 	}
-	/**
-	 * @param nombre
-	 * @param cantidadDeOro
-	 * @param vehiculos
-	 */
-	public Jugador(String nombre,ArrayList<Vehiculo> vehiculos) {
-		super();
-		this.nombre = nombre;
-		this.cantidadDeOro = 10;
-		this.vehiculos = null;
-		this.puntosDeVida=50;
-		this.puntosDePoder=3;
-		this.batallas=null;
-		this.contadorDeBatallas=0;
-		this.vehiculos=vehiculos;
-		this.vehiculoUsando=vehiculos.get(0); //el primer vehiculo es el que esta usando. 
-		this.reparadoresPontenciales=null;
+	
+	private String getDireccion() {
+		contadorDeJugadores=(Integer) Archivos.leerObjeto(CONTADOR_DE_JUGADORES);
+		contadorDeJugadores++;
+		Archivos.escribirObjeto(new Integer(contadorDeJugadores),CONTADOR_DE_JUGADORES);
+		return "Jugador"+contadorDeJugadores+EXTENSION;
 	}
 	
+	private String getDireccion(String numero) {
+		return "Jugador"+numero+EXTENSION;
+	}
+
+	public void agregarItemsDeJugadores(JComboBox comboBoxJugador1) {
+		try {
+			int cantidadDeJugadores= (Integer) Archivos.leerObjeto(CONTADOR_DE_JUGADORES);
+			for (int i = 1; i <=cantidadDeJugadores; i++) {
+				Jugador tmp =(Jugador) Archivos.leerObjeto(getDireccion(String.valueOf(i)));
+				comboBoxJugador1.addItem(tmp.getNombre());
+			}		
+		} catch (NullPointerException e) {
+			JOptionPane.showMessageDialog(null,e.getMessage() , "NullPointerException", JOptionPane.ERROR_MESSAGE);
+		}
+
+	}
 }
