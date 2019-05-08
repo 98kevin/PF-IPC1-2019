@@ -1,22 +1,25 @@
 package com.kevin;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
 
 public class FormularioDeJuego extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9000L;
 	private JPanel contentPane;
 
 	/**
@@ -39,7 +42,7 @@ public class FormularioDeJuego extends JFrame {
 	 * Create the frame.
 	 */
 	public FormularioDeJuego() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 		setBounds(100, 100, 451, 445);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.GRAY);
@@ -57,8 +60,9 @@ public class FormularioDeJuego extends JFrame {
 		lblTipoDeJuego.setBounds(34, 54, 105, 17);
 		contentPane.add(lblTipoDeJuego);
 		
-		JComboBox comboBoxTipoDeJuego = new JComboBox();
-		comboBoxTipoDeJuego.setBounds(157, 49, 118, 26);
+		JComboBox<String> comboBoxTipoDeJuego = new JComboBox<String>();
+		comboBoxTipoDeJuego.setBounds(157, 49, 214, 26);
+		new Juego().agregarTiposDeJuego(comboBoxTipoDeJuego);
 		contentPane.add(comboBoxTipoDeJuego);
 		
 		JLabel lblPrimerJugador = new JLabel("Primer Jugador");
@@ -76,21 +80,28 @@ public class FormularioDeJuego extends JFrame {
 		lblEsenario.setBounds(34, 216, 60, 17);
 		contentPane.add(lblEsenario);
 		
-		JComboBox comboBoxJugador1 = new JComboBox();
-		comboBoxJugador1.setBounds(157, 109, 182, 26);
+		JComboBox<String > comboBoxJugador1 = new JComboBox<String>();
+		comboBoxJugador1.setBounds(157, 104, 214, 26);
 		new Jugador().agregarItemsDeJugadores(comboBoxJugador1);
 		contentPane.add(comboBoxJugador1);
 		
-		JComboBox comboBoxJugador2 = new JComboBox();
-		comboBoxJugador2.setBounds(157, 154, 182, 26);
+		JComboBox<String> comboBoxJugador2 = new JComboBox<String>();
+		comboBoxJugador2.setBounds(157, 154, 214, 26);
 		new Jugador().agregarItemsDeJugadores(comboBoxJugador2);
 		contentPane.add(comboBoxJugador2);
 		
-		JComboBox comboBoxEsenario = new JComboBox();
-		comboBoxEsenario.setBounds(112, 211, 163, 26);
+		JComboBox<String> comboBoxEsenario = new JComboBox<String>();
+		comboBoxEsenario.setBounds(112, 211, 202, 26);
+		new Juego().agregarTiposDeEsenario(comboBoxEsenario);
 		contentPane.add(comboBoxEsenario);
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new Esenario(comboBoxTipoDeJuego,comboBoxJugador1,comboBoxJugador2,comboBoxEsenario);
+				setVisible(false);
+			}
+		});
 		btnAceptar.setIcon(new ImageIcon("Iconos/aceptar.png"));
 		btnAceptar.setBackground(Color.DARK_GRAY);
 		btnAceptar.setForeground(Color.WHITE);
@@ -101,12 +112,14 @@ public class FormularioDeJuego extends JFrame {
 		btnCancelar.setIcon(new ImageIcon("Iconos/cancelar.png"));
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
 			}
 		});
 		btnCancelar.setBackground(Color.DARK_GRAY);
 		btnCancelar.setForeground(Color.WHITE);
 		btnCancelar.setBounds(208, 334, 163, 49);
 		contentPane.add(btnCancelar);
+		setVisible(true);
 	}
 
 }

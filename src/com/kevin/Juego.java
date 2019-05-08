@@ -1,13 +1,18 @@
 package com.kevin;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class Juego {
+public class Juego implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7000L;
 	static final int JUGADOR_JUGADOR=0;
 	static final int JUGADOR_PC=1;
 	
@@ -77,7 +82,7 @@ public class Juego {
 			jugadores[0]= gamer1;
 		}
 		JOptionPane.showMessageDialog(null, "Datos Cargados exitosamente", "Informacion", JOptionPane.INFORMATION_MESSAGE);
-		new Esenario(this);
+		
 	}
 	
 	/**
@@ -149,6 +154,15 @@ public class Juego {
 	public void setTipoEsenario(int tipoEsenario) {
 		this.tipoEsenario = tipoEsenario;
 	}
-	
+
+	public void agregarTiposDeJuego(JComboBox<String> comboBox) {
+		comboBox.addItem("Jugador vs Jugador ");
+		comboBox.addItem("Jugador vs Computadora");
+	}
+	public void agregarTiposDeEsenario(JComboBox<String> comboBox) {
+		comboBox.addItem("4 x 4");
+		comboBox.addItem("6 x 4");
+		comboBox.addItem("8 x 9");
+	}
 }
 

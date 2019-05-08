@@ -10,7 +10,7 @@ public class Vehiculo implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 2000L;
 	protected int ataque;
 	protected int defensa;
 	protected double punteria;
@@ -198,6 +198,7 @@ public class Vehiculo implements Serializable{
 
 	public Vehiculo(String nombre) {
 		super();
+		armas= new ArrayList<Arma>();
 		armas.add(new Arma().getArmaBasica());
 		this.imagen = getDefaultIcon();
 		this.estado = true; 

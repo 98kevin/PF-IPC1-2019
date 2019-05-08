@@ -13,7 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class SeleccionadorDeVehiculo extends JFrame{
-	private Vehiculo vehiculoSeleccionado;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	JButton avion;
 	JButton tanque;
 	JTextField txtNombre;
@@ -67,9 +70,9 @@ public class SeleccionadorDeVehiculo extends JFrame{
 			// TODO Auto-generated method stub
 			if(e.getSource().equals(aceptar)) {
 				if(avion.isSelected())
-				vehiculoSeleccionado=new Avion(txtNombre.getText());
+					new Avion(txtNombre.getText());
 				if(tanque.isSelected())
-					vehiculoSeleccionado=new Tanque(txtNombre.getText());
+					new Tanque(txtNombre.getText());
 			}
 			if(e.getSource().equals(cancelar)) 
 				setVisible(false);

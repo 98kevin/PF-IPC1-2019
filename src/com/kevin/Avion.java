@@ -1,10 +1,13 @@
 package com.kevin;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 public final class Avion extends Vehiculo{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 13000L;
 	private double velocidadDeDisparo;
 	
 	public double getVelocidadDeDisparo() {

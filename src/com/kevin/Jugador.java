@@ -8,6 +8,10 @@ import javax.swing.JOptionPane;
 
 public class Jugador implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5000L;
 	private static int contadorDeJugadores=0;
 	private static final String CONTADOR_DE_JUGADORES="ContadorDeJugadores.ctr";
 	private static final String EXTENSION = ".gmr";
@@ -177,7 +181,7 @@ public class Jugador implements Serializable{
 		return "Jugador"+contadorDeJugadores+EXTENSION;
 	}
 	
-	private String getDireccion(String numero) {
+	public String getDireccion(String numero) {
 		return "Jugador"+numero+EXTENSION;
 	}
 

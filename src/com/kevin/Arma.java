@@ -5,13 +5,16 @@ import java.util.Random;
 
 public class Arma implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 14000L;
 	private static final int MUNICIONES_INICIALES = 10;
 	private static final int NUMERO_ARMAS_BASICAS=3;
 	private static final int PRECIO_AMETRALLADORA = 5;
 	private static final int PRECIO_GRANADA = 8;
 	private static final int PRECIO_BOMBA_NUCLEAR = 12;
 	
-	private static final String CARPETA_DE_ARMAS="Armas/";
 	private static final String EXTENSION = ".wpn";  //De Weapon
 	private static final String CONTADOR_DE_ARMAS="contadorDeArmas"+".ctr";
 	
@@ -113,9 +116,8 @@ public class Arma implements Serializable{
 	 * @return Un arma basica
 	 */
 	public  Arma getArmaBasica() {
-			int numero= new Random().nextInt(NUMERO_ARMAS_BASICAS);
-			Arma armaRetorno = (Arma) Archivos.leerObjeto("arma"+String.valueOf(numero)+EXTENSION);
-			return armaRetorno; //Se le suma una unidad ya que no existe un archivo arma0.wpn
+			int numero= new Random().nextInt(NUMERO_ARMAS_BASICAS)+1;
+			return  (Arma) Archivos.leerObjeto(getDireccion(numero));
 	}
 	
 	public void escribirArmasBasicas() {
@@ -133,4 +135,7 @@ public class Arma implements Serializable{
 		return "arma"+contadorDeArmas+EXTENSION;
 	}
 	
+	private String getDireccion(int posicion) {
+		return "arma"+posicion+EXTENSION;
+	}
 }

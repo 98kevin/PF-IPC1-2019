@@ -15,9 +15,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.Color;
 
 public class FormularioDeArmas extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 10000L;
 	private JPanel contentPane;
 	private JTextField textFieldNombre;
 	private JTextField textFieldAtaque;
@@ -32,8 +37,9 @@ public class FormularioDeArmas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FormularioDeArmas frame = new FormularioDeArmas();
-					frame.setVisible(true);
+					//FormularioDeArmas frame = new FormularioDeArmas();
+					new VentanaPrincipal().setVisible(true);
+					//frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,10 +52,10 @@ public class FormularioDeArmas extends JFrame {
 	 */
 	public FormularioDeArmas() {
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize( 450, 300);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -60,6 +66,7 @@ public class FormularioDeArmas extends JFrame {
 		contentPane.add(lblCreacionDeArmas);
 		
 		JLabel lblNombre = new JLabel("Nombre");
+		lblNombre.setForeground(Color.WHITE);
 		lblNombre.setBounds(32, 58, 60, 17);
 		contentPane.add(lblNombre);
 		
@@ -69,6 +76,7 @@ public class FormularioDeArmas extends JFrame {
 		textFieldNombre.setColumns(10);
 		
 		JLabel lblAtaque = new JLabel("Ataque");
+		lblAtaque.setForeground(Color.WHITE);
 		lblAtaque.setBounds(32, 91, 60, 17);
 		contentPane.add(lblAtaque);
 		
@@ -78,6 +86,7 @@ public class FormularioDeArmas extends JFrame {
 		textFieldAtaque.setColumns(10);
 		
 		JLabel lblPunteria = new JLabel("Punteria");
+		lblPunteria.setForeground(Color.WHITE);
 		lblPunteria.setBounds(32, 126, 60, 17);
 		contentPane.add(lblPunteria);
 		
@@ -87,6 +96,7 @@ public class FormularioDeArmas extends JFrame {
 		textFieldPunteria.setColumns(10);
 		
 		JLabel lblPrecio = new JLabel("Precio");
+		lblPrecio.setForeground(Color.WHITE);
 		lblPrecio.setBounds(32, 166, 60, 17);
 		contentPane.add(lblPrecio);
 		
@@ -96,6 +106,7 @@ public class FormularioDeArmas extends JFrame {
 		textFieldPrecio.setColumns(10);
 		
 		JLabel lblImagen = new JLabel("Imagen");
+		lblImagen.setForeground(Color.WHITE);
 		lblImagen.setBounds(239, 91, 60, 17);
 		contentPane.add(lblImagen);
 		
@@ -104,6 +115,8 @@ public class FormularioDeArmas extends JFrame {
 		contentPane.add(labelImagen);
 		
 		JButton btnSeleccionar = new JButton("Seleccionar");
+		btnSeleccionar.setForeground(Color.WHITE);
+		btnSeleccionar.setBackground(Color.DARK_GRAY);
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -121,6 +134,9 @@ public class FormularioDeArmas extends JFrame {
 		contentPane.add(btnSeleccionar);
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.setForeground(Color.WHITE);
+		btnAceptar.setBackground(Color.DARK_GRAY);
+		btnAceptar.setIcon(new ImageIcon("Iconos/aceptar.png"));
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -133,18 +149,20 @@ public class FormularioDeArmas extends JFrame {
 				}
 			}
 		});
-		btnAceptar.setBounds(87, 211, 105, 27);
+		btnAceptar.setBounds(72, 211, 165, 50);
 		contentPane.add(btnAceptar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.setForeground(Color.WHITE);
+		btnCancelar.setBackground(Color.DARK_GRAY);
+		btnCancelar.setIcon(new ImageIcon("Iconos/cancelar.png"));
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		btnCancelar.setBounds(253, 211, 105, 27);
+		btnCancelar.setBounds(252, 211, 144, 50);
 		contentPane.add(btnCancelar);
-		
 		setVisible(true);
 	}
 }

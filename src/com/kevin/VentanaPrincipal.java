@@ -3,40 +3,39 @@ package com.kevin;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
-public class Principal extends JFrame {
-
+public class VentanaPrincipal extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3000L;
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					Principal frame = new Principal();
+					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the frame.
 	 */
-	public Principal() {
+	public VentanaPrincipal() {
+		Arma arma = new Arma();
+		arma.escribirArmasBasicas();
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1002, 588);
@@ -93,5 +92,4 @@ public class Principal extends JFrame {
 		lblTitulo.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 18));
 		lblTitulo.setBounds(413, 36, 214, 30);
 	}
-
 }
