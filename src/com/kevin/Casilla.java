@@ -19,16 +19,20 @@ public class Casilla extends JButton{
 	protected int tipo;
 	protected Color color;
 	protected boolean tieneVehiculo;
+	protected int fila;
+	protected int col;
 /**
  * 
  * @param tipo
  */
-	public Casilla(int tipo) {
+	public Casilla(int tipo,int fila, int col) {
 		super();
 		this.vehiculo = null;  //cuando se crea una casilla no tiene originalmente un vehiculo
 		this.tipo = tipo;
-		this.color = getColor();
+		this.color=getColor();
 		this.tieneVehiculo=false;
+		this.fila=fila;
+		this.col= col;
 	}
 	/**
 	 * @return the vehiculo
@@ -66,6 +70,30 @@ public class Casilla extends JButton{
 	 */
 	public void setColor(Color color) {
 		this.color = color;
+	}
+	/**
+	 * @return the fila
+	 */
+	public int getFila() {
+		return fila;
+	}
+	/**
+	 * @param fila the fila to set
+	 */
+	public void setFila(int fila) {
+		this.fila = fila;
+	}
+	/**
+	 * @return the col
+	 */
+	public int getCol() {
+		return col;
+	}
+	/**
+	 * @param col the col to set
+	 */
+	public void setCol(int col) {
+		this.col = col;
 	}
 	
 }

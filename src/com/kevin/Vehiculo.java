@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class Vehiculo implements Serializable{
 
@@ -88,6 +89,7 @@ public class Vehiculo implements Serializable{
 		this.imagen = imagen;
 	}
 	/**
+	 * Retorna si esta vivo o no. 
 	 * @return the estado
 	 */
 	public boolean isEstado() {
@@ -195,6 +197,7 @@ public class Vehiculo implements Serializable{
 	public void setColumna(int columna) {
 		this.columna = columna;
 	}	
+	
 
 	public Vehiculo(String nombre) {
 		super();
@@ -211,5 +214,50 @@ public class Vehiculo implements Serializable{
 	
 	protected ImageIcon getDefaultIcon() {
 		return null;
+	}
+	/**
+	 * @return the armas
+	 */
+	public ArrayList<Arma> getArmas() {
+		return armas;
+	}
+	/**
+	 * @param armas the armas to set
+	 */
+	public void setArmas(ArrayList<Arma> armas) {
+		this.armas = armas;
+	}
+	
+	public void atacar(Vehiculo vehiculoSeleccionado,  Casilla casillaDelJuagador, Casilla casillaEnemiga, 
+			Jugador enemigo,Esenario esenario, int indiceDeArma, int valorDelDado) {
+		try {
+			int ataque = vehiculoSeleccionado.getAtaque();
+			int defensaDelEnemigo= casillaEnemiga.getVehiculo().getDefensa();
+			int casillasDesplazado=Math.abs(casillaDelJuagador.getFila() - casillaEnemiga.getFila()) 
+					+Math.abs(casillaDelJuagador.getCol()-casillaEnemiga.getCol() -2);
+			int porcentajeRestanteAdicional=Math.abs(valorDelDado-4*casillasDesplazado);
+			int ataqueResultante = (int) ((ataque*porcentajeRestanteAdicional)/(100));
+			if(defensaDelEnemigo<ataqueResultante) {
+				casillaEnemiga.getVehiculo().setPuntosDeVida(getPuntosDeVida()-ataqueResultante);
+				JOptionPane.showMessageDialog(null, "El objetivo fue golpeado con un ataque de: " + String.valueOf(ataqueResultante));
+			}else {
+				JOptionPane.showMessageDialog(null, "No se concreto el ataque al objetivo porque su defensa era mayor");
+			}
+		if(casillaEnemiga instanceof Agua)
+			((Agua) casillaEnemiga).setVida(getPuntosDeVida()-ataqueResultante, casillaEnemiga);
+		if(casillaEnemiga instanceof Montania) 
+			((Montania) casillaEnemiga).setVida(getPuntosDeVida()-ataqueResultante,casillaEnemiga);
+		//evaluamos su vida y pasamos al siguiente turno 
+		if(new Jugador().estaVivo(enemigo)) {
+			esenario.setTurnoActivo(enemigo);
+			JOptionPane.showMessageDialog(null, "Siguiente turno");
+		}
+		if(! new Jugador().estaVivo(enemigo)) {//si el enemigo no esta vivo ejecutamos este codigo
+			  
+		}
+		
+		} catch (NullPointerException e) {
+			//no hacemos nada en caso de que no exista vehiculo en la casilla
+		} 
 	}
 }

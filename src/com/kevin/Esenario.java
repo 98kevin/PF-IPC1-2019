@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -15,31 +16,53 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
+/**
+ * Es el lugar donde se desarrolla el combate. 
+ * @author kevin
+ *
+ */
 public class Esenario extends JFrame {
 
 	/**
-	 * 
+	 * Serializacion de la clase Esenario
 	 */
 	private static final long serialVersionUID = 11000L;
-	private static final int CARAS_DADO_COMODIN = 4;
-	private static final int CARAS_DADO_ATAQUE = 100;
-	private static final int CARAS_DADO_MOVIMIENTO = 6;
+	
+	//constantes para las acciones de juego
+	private static final int MOVIMIENTO=0;
+	private static final int ATAQUE=1;
+	private static final int COMODIN=2;
 	
 	private JPanel contentPane;
 	private JPanel panelDeJuego;
-	private Random random;
-	private int resultadoDado;
-	private Jugador jugador1;
-	private Jugador jugador2;
-	private int tipoDeJuego;
-	private int tipoDeEsenario;
-	private String direccion;
+	private JLabel jugadorActivo;
+	private JComboBox<String> comboBoxArmas;
+	private JButton btnSeleccionarArma;
+	private JLabel labelArmaSeleccionada;
+	private JLabel etqResultadoDado;
+	
 	private Casilla [][] matriz;
 	
+	private Vehiculo vehiculoSeleccionado;
+	private Casilla casillaVehiculoAtacante;
+	private int indiceDelArmaSeleccionada;
+	private Casilla casillaEnemigo;//este valor se utiliza en la clase interna
+	private int valorDelDado;
+	
+	private int tipoDeJuego;
+	private int tipoDeEsenario;
+	private int tipoDeAccion;
+	private boolean esTurnoJugador1;
+
+	private Jugador jugador1;
+	private Jugador jugador2;
+	private Jugador jugadorEnTurno;
+	private Esenario esenario;
+	private String direccion;
 	
 	/**
 	 * Create the frame.
@@ -48,19 +71,19 @@ public class Esenario extends JFrame {
 			JComboBox<String> comboBoxJugador2, JComboBox<String > tipoDeEsenario) {
 		Jugador jugador = new Jugador();
 		
-		direccion=jugador.getDireccion(String.valueOf(comboBoxJugador1.getSelectedIndex()+1)); //se suma una unidad porque la indexacion del comboBox comienza en 0
+		direccion=jugador.getDireccion(String.valueOf(comboBoxJugador1.getSelectedIndex()+1));
+		//se suma una unidad porque la indexacion del comboBox comienza en 0
 		this.jugador1=(Jugador) Archivos.leerObjeto(direccion);
 		
-		direccion=jugador.getDireccion(String.valueOf(comboBoxJugador2.getSelectedIndex()+1)); //se suma una unidad porque la indexacion del comboBox comienza en 0
+		direccion=jugador.getDireccion(String.valueOf(comboBoxJugador2.getSelectedIndex()+1)); 
+		//se suma una unidad porque la indexacion del comboBox comienza en 0
 		this.jugador2=(Jugador) Archivos.leerObjeto(direccion);
-		
+		this.esenario=this;
 		this.tipoDeJuego=tipoDeJuego.getSelectedIndex();
 		this.tipoDeEsenario= tipoDeEsenario.getSelectedIndex();
-		
-		llenarSeccionesDelEsenario(this.tipoDeEsenario);
-		
+		this.esTurnoJugador1=new Random().nextBoolean();
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 1175, 706);
+		setBounds(100, 100, 1175, 762);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -85,21 +108,16 @@ public class Esenario extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		panelDeJuego.setBackground(Color.LIGHT_GRAY);
-		panelDeJuego.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panelDeJuego.setBounds(12, 12, 630, 632);
-		contentPane.add(panelDeJuego);
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.GRAY);
-		panel_1.setBounds(648, 0, 525, 644);
+		panel_1.setBounds(648, 0, 525, 682);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(Color.GRAY);
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_2.setBounds(114, 178, 399, 160);
+		panel_2.setBounds(12, 358, 511, 120);
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -112,7 +130,7 @@ public class Esenario extends JFrame {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(Color.GRAY);
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_3.setBounds(114, 350, 399, 202);
+		panel_3.setBounds(12, 490, 511, 120);
 		panel_1.add(panel_3);
 		panel_3.setLayout(null);
 		
@@ -122,99 +140,239 @@ public class Esenario extends JFrame {
 		etqJugador2.setBounds(12, 12, 88, 17);
 		panel_3.add(etqJugador2);
 		
-		JLabel lblArmas = new JLabel("Armas");
-		lblArmas.setForeground(Color.WHITE);
-		lblArmas.setBounds(12, 18, 49, 41);
-		panel_1.add(lblArmas);
-		
-		JLabel label_3 = new JLabel("<VehiculoUsando>");
-		label_3.setForeground(Color.WHITE);
-		label_3.setBounds(73, 18, 318, 41);
-		panel_1.add(label_3);
+		JLabel lblDeAcciones = new JLabel("<EtiquetaDinamica>");
+		lblDeAcciones.setForeground(Color.WHITE);
+		lblDeAcciones.setBounds(22, 76, 193, 41);
+		panel_1.add(lblDeAcciones);
 		
 		JPanel panelDeArmas = new JPanel();
 		panelDeArmas.setBackground(Color.GRAY);
-		panelDeArmas.setBounds(12, 54, 487, 112);
+		panelDeArmas.setBounds(12, 108, 487, 112);
 		panel_1.add(panelDeArmas);
-		panelDeArmas.setLayout(new GridLayout(3, 6, 0, 0));
+		panelDeArmas.setLayout(null);
 		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBounds(12, 178, 93, 374);
-		panel_1.add(panel_5);
-		panel_5.setBackground(Color.GRAY);
-		panel_5.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_5.setLayout(null);
-		
-		JLabel resultado = new JLabel("54");
-		resultado.setForeground(Color.WHITE);
-		resultado.setToolTipText("Resultado del Dado");
-		resultado.setFont(new Font("Dialog", Font.BOLD, 24));
-		resultado.setBounds(22, 283, 44, 49);
-		panel_5.add(resultado);
-		
-		JLabel lblDados = new JLabel("Dados");
-		lblDados.setForeground(Color.WHITE);
-		lblDados.setBounds(12, 12, 60, 17);
-		panel_5.add(lblDados);
-		
-		JButton dadoDeMovimiento = new JButton("");
-		dadoDeMovimiento.setBackground(Color.DARK_GRAY);
-		dadoDeMovimiento.setToolTipText("Dado de movimiento");
-		dadoDeMovimiento.setIcon(new ImageIcon("Iconos/dadoDeMovimiento.png"));
-		dadoDeMovimiento.addActionListener(new ActionListener() {
+		JButton btnNewButton = new JButton("Atacar");
+		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				random = new Random();
-				resultadoDado=random.nextInt(CARAS_DADO_MOVIMIENTO)+1;
-				resultado.setText(String.valueOf(resultadoDado));
+				setAccion(ATAQUE);
 			}
 		});
-		dadoDeMovimiento.setBounds(12, 41, 69, 59);
-		panel_5.add(dadoDeMovimiento);
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(Color.DARK_GRAY);
+		btnNewButton.setIcon(new ImageIcon("Iconos/atacar.png"));
+		btnNewButton.setBounds(12, 12, 148, 88);
+		panelDeArmas.add(btnNewButton);
 		
-		JButton dadoDeAtaque = new JButton();
-		dadoDeAtaque.setBackground(Color.DARK_GRAY);
-		dadoDeAtaque.setIcon(new ImageIcon("Iconos/dadoDeAtaque.png"));
-		dadoDeAtaque.addActionListener(new ActionListener() {
+		JButton btnMovimiento = new JButton("Moverse");
+		btnMovimiento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				random = new Random();
-				resultadoDado=random.nextInt(CARAS_DADO_ATAQUE)+1;
-				resultado.setText(String.valueOf(resultadoDado));
+				tipoDeAccion=MOVIMIENTO;
 			}
 		});
-		dadoDeAtaque.setToolTipText("Dado de Ataque");
-		dadoDeAtaque.setBounds(12, 115, 69, 59);
-		panel_5.add(dadoDeAtaque);
+		btnMovimiento.setForeground(Color.WHITE);
+		btnMovimiento.setBackground(Color.DARK_GRAY);
+		btnMovimiento.setIcon(new ImageIcon("Iconos/movimiento.png"));
+		btnMovimiento.setBounds(165, 12, 152, 88);
+		panelDeArmas.add(btnMovimiento);
 		
-		JButton dadoDeComodin = new JButton("");
-		dadoDeComodin.setBackground(Color.DARK_GRAY);
-		dadoDeComodin.addActionListener(new ActionListener() {
+		JButton btnComodin = new JButton("Comodin");
+		btnComodin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				random = new Random();
-				resultadoDado=random.nextInt(CARAS_DADO_COMODIN)+1;
-				resultado.setText(String.valueOf(resultadoDado));
+				tipoDeAccion=COMODIN;
 			}
 		});
-		dadoDeComodin.setIcon(new ImageIcon("Iconos/dadoDeComodin.png"));
-		dadoDeComodin.setToolTipText("Dado de Comodin");
-		dadoDeComodin.setBounds(12, 183, 69, 59);
-		panel_5.add(dadoDeComodin);
+		btnComodin.setForeground(Color.WHITE);
+		btnComodin.setBackground(Color.DARK_GRAY);
+		btnComodin.setIcon(new ImageIcon("Iconos/comodin.png"));
+		btnComodin.setBounds(329, 12, 158, 88);
+		panelDeArmas.add(btnComodin);
 		
-		JLabel lblResultado = new JLabel("Resultado");
-		lblResultado.setBounds(12, 254, 60, 17);
-		panel_5.add(lblResultado);
+		JPanel panel = new JPanel();
+		panel.setBackground(Color.GRAY);
+		panel.setBounds(12, 12, 501, 74);
+		panel_1.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblJugadorActivo = new JLabel("Jugador Activo");
+		lblJugadorActivo.setForeground(Color.WHITE);
+		lblJugadorActivo.setBounds(12, 12, 113, 17);
+		panel.add(lblJugadorActivo);
+		
+		jugadorActivo = new JLabel("<JugadorDynamic>");
+		jugadorActivo.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 20));
+		jugadorActivo.setForeground(Color.WHITE);
+		jugadorActivo.setBounds(12, 32, 239, 30);
+		panel.add(jugadorActivo);
+		
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 12));
+		btnGuardar.setForeground(Color.WHITE);
+		btnGuardar.setBackground(Color.DARK_GRAY);
+		btnGuardar.setIcon(new ImageIcon("Iconos/guardar.png"));
+		btnGuardar.setBounds(161, 622, 146, 47);
+		panel_1.add(btnGuardar);
+		
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 12));
+		btnSalir.setForeground(Color.WHITE);
+		btnSalir.setBackground(Color.DARK_GRAY);
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int val= JOptionPane.showConfirmDialog(null, "Desea salir realmente", "Salir", JOptionPane.INFORMATION_MESSAGE);
+				if(val==JOptionPane.YES_OPTION) {
+					setVisible(false);
+				}
+			}
+		});
+		btnSalir.setIcon(new ImageIcon("Iconos/salir.png"));
+		btnSalir.setBounds(337, 622, 146, 47);
+		panel_1.add(btnSalir);
+		
+		JPanel panelVariable = new JPanel();
+		panelVariable.setBackground(Color.GRAY);
+		panelVariable.setBounds(22, 232, 491, 112);
+		panel_1.add(panelVariable);
+		panelVariable.setLayout(null);
+		
+		comboBoxArmas = new JComboBox<String>();
+		comboBoxArmas.setBounds(12, 12, 159, 26);
+		panelVariable.add(comboBoxArmas);
+		
+		btnSeleccionarArma = new JButton("Seleccionar");
+		btnSeleccionarArma.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				indiceDelArmaSeleccionada=comboBoxArmas.getSelectedIndex();
+				labelArmaSeleccionada.setText(vehiculoSeleccionado.getArmas().get(indiceDelArmaSeleccionada).getNombre());
+			}
+		});
+		btnSeleccionarArma.setBackground(Color.DARK_GRAY);
+		btnSeleccionarArma.setForeground(Color.WHITE);
+		btnSeleccionarArma.setBounds(181, 12, 133, 27);
+		panelVariable.add(btnSeleccionarArma);
+		
+		JLabel lblArma = new JLabel("Arma");
+		lblArma.setForeground(Color.WHITE);
+		lblArma.setBounds(12, 51, 60, 17);
+		panelVariable.add(lblArma);
+		
+		labelArmaSeleccionada = new JLabel("<Dynamic>");
+		labelArmaSeleccionada.setForeground(Color.WHITE);
+		labelArmaSeleccionada.setBounds(81, 51, 233, 17);
+		panelVariable.add(labelArmaSeleccionada);
+		
+		JLabel lblDado = new JLabel("Dado");
+		lblDado.setForeground(Color.WHITE);
+		lblDado.setBounds(359, 17, 60, 17);
+		panelVariable.add(lblDado);
+		
+		JButton btnDado = new JButton("");
+		btnDado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setResultadoDado(Dado.getValorDelDado(tipoDeAccion)+50);
+				vehiculoSeleccionado.atacar(vehiculoSeleccionado,casillaVehiculoAtacante,
+						casillaEnemigo,getJugadorInactivo(),esenario,indiceDelArmaSeleccionada,valorDelDado);
+			}
+		});
+		btnDado.setBackground(Color.DARK_GRAY);
+		btnDado.setIcon(new ImageIcon("Iconos/dadoDeMovimiento.png"));
+		btnDado.setBounds(335, 34, 105, 78);
+		panelVariable.add(btnDado);
+		
+		JLabel lblResultado = new JLabel("Resultado ");
+		lblResultado.setFont(new Font("Dialog", Font.BOLD, 15));
+		lblResultado.setForeground(Color.WHITE);
+		lblResultado.setBounds(12, 80, 108, 17);
+		panelVariable.add(lblResultado);
+		
+		etqResultadoDado = new JLabel("<dynamic>");
+		etqResultadoDado.setFont(new Font("Dialog", Font.BOLD, 15));
+		etqResultadoDado.setForeground(Color.WHITE);
+		etqResultadoDado.setBounds(132, 80, 108, 17);
+		panelVariable.add(etqResultadoDado);
+		
+		llenarSeccionesDelEsenario(this.tipoDeEsenario);
+		panelDeJuego.setBackground(Color.LIGHT_GRAY);
+		panelDeJuego.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panelDeJuego.setBounds(12, 12, 630, 632);
+		contentPane.add(panelDeJuego);
 		
 		asingarVehiculosEnMatriz(this.tipoDeJuego,jugador1, jugador2, this.matriz,this.tipoDeEsenario);
+		jugar(jugador1, jugador2, matriz);
+		
 		setVisible(true);
 	}
+	
+	private Jugador getJugadorInactivo() {
+		if(jugador1 .equals(jugadorEnTurno))
+		return jugador2;
+		if(jugador2 .equals(jugadorEnTurno))
+			return jugador1;
+		else
+			return null;
+	}
+	
+	
+	/**
+	 * @return the matriz
+	 */
+	public Casilla[][] getMatriz() {
+		return matriz;
+	}
 
-	private void asingarVehiculosEnMatriz(int tipoDeJuego2, Jugador jugador12, Jugador jugador22, Casilla[][] matriz2, int tipoDeEsenario) {
+	public void setResultadoDado(int valor) {
+		this.valorDelDado= valor;
+		etqResultadoDado.setText(String.valueOf(this.valorDelDado));
+	}
+	
+	public void setVehiculoSeleccionado(Vehiculo vehiculo) {
+		try {
+			this.vehiculoSeleccionado=vehiculo;
+			comboBoxArmas.removeAllItems();
+			Iterator it = vehiculo.getArmas().iterator();
+			while (it.hasNext()) {
+				Arma tmp = (Arma)	it.next();			
+						comboBoxArmas.addItem(tmp.getNombre());
+			}
+		} catch (NullPointerException e) {
+			comboBoxArmas.removeAllItems();
+		}
+	}
+	
+	public void setAccion(int accion) {
+		this.tipoDeAccion=accion;
+		if(this.tipoDeAccion==ATAQUE) {
+			btnSeleccionarArma.setVisible(true);
+			comboBoxArmas.setVisible(true);
+		}else {
+			btnSeleccionarArma.setVisible(false);
+			comboBoxArmas.setVisible(false);
+		}
+	}
+	
+	private void jugar(Jugador jugador1, Jugador jugador2, Casilla[][] matriz) {
+		if(esTurnoJugador1) {
+			  setTurnoActivo(jugador1); 
+		}if(!esTurnoJugador1) {
+			 setTurnoActivo(jugador2); 
+		}
+	}
+
+	void setTurnoActivo(Jugador jugador) {  //visibilidad default para el mismo paquete. 
+		jugadorActivo.setText(jugador.getNombre());
+		jugadorEnTurno=jugador;
+		esTurnoJugador1 =jugador.equals(jugador1) ? true: false;	
+		this.vehiculoSeleccionado=null;
+		tipoDeAccion=-1;
+	}
+
+	private void asingarVehiculosEnMatriz(int tipoDeJuego2, Jugador jugador12, Jugador jugador22, 
+			Casilla[][] matriz2, int tipoDeEsenario) {
 		if(tipoDeJuego2==Juego.JUGADOR_JUGADOR) {
 			llenarVehiculos(jugador12,matriz2,tipoDeEsenario);
 			llenarVehiculos(jugador22,matriz2,tipoDeEsenario);
 		}if(this.tipoDeJuego==Juego.JUGADOR_PC) {
 			llenarVehiculos(jugador12,matriz2,tipoDeEsenario);
 		}
-		
 	}
 
 	private void llenarVehiculos(Jugador jugador, Casilla[][] matriz2,int tipoDeEsenario) {
@@ -232,10 +390,12 @@ public class Esenario extends JFrame {
 			int x =new Random().nextInt(i);
 			int y =new Random().nextInt(j);
 			if(matriz2[x][y].tieneVehiculo){
-				asignarVehiculos(jugador,matriz2,  i,  j, vehiculosFaltantes); //seguira llamando al metodo hasta que ya no hayan vehiculos por asignar. 
+				asignarVehiculos(jugador,matriz2,  i,  j, vehiculosFaltantes); //seguira llamando al metodo hasta que
+				//ya no hayan vehiculos por asignar. 
 			}
 			if(!matriz2[x][y].tieneVehiculo) {
-				matriz2[x][y].setVehiculo((Vehiculo) jugador.getVehiculos().get(vehiculosFaltantes-1)); //se resta uno porque la indexacion comineza en 0. 
+				matriz2[x][y].setVehiculo((Vehiculo) jugador.getVehiculos().get(vehiculosFaltantes-1)); 
+				//se resta uno porque la indexacion comineza en 0. 
 				matriz2[x][y].setIcon(matriz[x][y].getVehiculo().getDefaultIcon());
 				asignarVehiculos(jugador,matriz2,  i,  j, vehiculosFaltantes-1);  
 			}
@@ -256,24 +416,59 @@ public class Esenario extends JFrame {
 		matriz= new Casilla[i][j];
 		for (int i2 = 0; i2 <i; i2++) {
 			for (int j2 = 0; j2 <j; j2++) {
-				matriz[i2][j2]=getSeccionAleatoria();
+				matriz[i2][j2]=getSeccionAleatoria(i2,j2);
+				matriz[i2][j2].addActionListener(new Listener());
 				matriz[i2][j2].setBackground(matriz[i2][j2].getColor());
+				if(matriz[i2][j2] instanceof Agua)
+					matriz[i2][j2].setText(String.valueOf(((Agua)matriz[i2][j2]).getVida()));
+				if(matriz[i2][j2] instanceof Montania)
+					matriz[i2][j2].setText(String.valueOf(((Montania)matriz[i2][j2]).getVida()));
 				panelDeJuego.add(matriz[i2][j2]);
 			}
 		}
 	}
-
-	private Casilla getSeccionAleatoria() {
+	
+	private Casilla getSeccionAleatoria(int i, int j) {
 		int val = new Random().nextInt(3);
 		switch (val) {
 		case 0: 
-			return new Terreno();
+			return new Terreno(i,j);
 		case 1: 
-			return new Agua();
+			return new Agua(i,j);
 		case 2: 
-			return new Montania();
+			return new Montania(i,j);
 		default:
 		return null;
+		}
+	}
+
+	class Listener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(hayVehiculoSeleccionado()) {
+				casillaEnemigo = (Casilla ) e.getSource();
+				JOptionPane.showMessageDialog(null, "Objetivo Seleccionado");
+			}
+			if(tipoDeAccion==ATAQUE&!hayVehiculoSeleccionado()){
+				setVehiculoSeleccionado(null);
+				casillaVehiculoAtacante =(Casilla) e.getSource();
+				Iterator it = jugadorEnTurno.getVehiculos().iterator();
+				boolean coincide=false;
+				while (it.hasNext()) {
+					Vehiculo v= (Vehiculo) it.next();
+					if(v.equals(casillaVehiculoAtacante.getVehiculo())) {
+						setVehiculoSeleccionado(v);
+						coincide=true;
+						JOptionPane.showMessageDialog(null, "Vehiculo Seleccionado");
+					}
+				}
+				if (!coincide)
+					JOptionPane.showMessageDialog(null, "No puede seleccionar esa casilla");
+			} //sierre del tipo de ataque
+		}//sierre del evento ActionPerformed
+
+		private boolean hayVehiculoSeleccionado() {
+			return (vehiculoSeleccionado!=null )  ?  true : false;
 		}
 	}
 }

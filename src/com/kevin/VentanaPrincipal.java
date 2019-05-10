@@ -91,5 +91,17 @@ public class VentanaPrincipal extends JFrame {
 		etiquetaDeFondo.add(lblTitulo);
 		lblTitulo.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 18));
 		lblTitulo.setBounds(413, 36, 214, 30);
+		
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+		btnSalir.setIcon(new ImageIcon("Iconos/salir.png"));
+		btnSalir.setForeground(Color.WHITE);
+		btnSalir.setBackground(Color.DARK_GRAY);
+		btnSalir.setBounds(280, 292, 249, 74);
+		etiquetaDeFondo.add(btnSalir);
 	}
 }

@@ -2,6 +2,7 @@ package com.kevin;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -193,8 +194,17 @@ public class Jugador implements Serializable{
 				comboBoxJugador1.addItem(tmp.getNombre());
 			}		
 		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(null,e.getMessage() , "NullPointerException", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,e.getMessage() , "Jugador.NullPointerException", JOptionPane.ERROR_MESSAGE);
 		}
-
+	}
+	
+	public boolean estaVivo(Jugador jugador) {
+		boolean estaVivo=false;
+		Iterator<Vehiculo> it = jugador.getVehiculos().iterator();
+		while (it.hasNext()) {
+			if(it.next().isEstado())
+				estaVivo=true;
+		}
+		return estaVivo;
 	}
 }

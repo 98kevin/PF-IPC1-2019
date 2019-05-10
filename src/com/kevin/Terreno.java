@@ -4,11 +4,13 @@ import java.awt.Color;
 
 public class Terreno extends Casilla{
 
-	public Terreno() {
-		super(TERRENO);
+	private static Color colorVerde = new Color(135,164,9);
+	
+	public Terreno(int i, int j) {
+		super(TERRENO,i,j);
 	}
 
 	public Color getColor() {
-		return Color.green;
+		return colorVerde;
 	}
 }
