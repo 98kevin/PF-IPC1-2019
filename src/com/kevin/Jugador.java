@@ -207,4 +207,9 @@ public class Jugador implements Serializable{
 		}
 		return estaVivo;
 	}
+
+	public void actualizarVehiculos(Jugador jugador1, Casilla[][] matriz) {
+		
+		
+	}
 }

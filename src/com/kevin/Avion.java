@@ -23,7 +23,6 @@ public final class Avion extends Vehiculo{
 		// TODO Auto-generated constructor stub
 		this.ataque = 7;
 		this.defensa = 3;
-		this.punteria = 70;
 		velocidadDeDisparo=1;
 	}
 

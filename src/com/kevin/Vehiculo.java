@@ -14,7 +14,6 @@ public class Vehiculo implements Serializable{
 	private static final long serialVersionUID = 2000L;
 	protected int ataque;
 	protected int defensa;
-	protected double punteria;
 	protected String nombre;
 	protected ImageIcon imagen;
 	protected boolean estado;  //True significa estar activo: false, destruido. 
@@ -52,18 +51,7 @@ public class Vehiculo implements Serializable{
 	public void setDefensa(int defensa) {
 		this.defensa = defensa;
 	}
-	/**
-	 * @return the punteria
-	 */
-	public double getPunteria() {
-		return punteria;
-	}
-	/**
-	 * @param punteria the punteria to set
-	 */
-	public void setPunteria(double punteria) {
-		this.punteria = punteria;
-	}
+
 	/**
 	 * @return the nombre
 	 */
@@ -147,6 +135,12 @@ public class Vehiculo implements Serializable{
 	 * @param puntosDeVida the puntosDeVida to set
 	 */
 	public void setPuntosDeVida(int puntosDeVida) {
+		if(puntosDeVida<=0) {
+			this.puntosDeVida =0;
+			this.setEstado(false);
+			this.setNumeroVecesDestruido(this.getNumeroVecesDestruido() +1);
+		}
+		else
 		this.puntosDeVida = puntosDeVida;
 	}
 	/**
@@ -198,7 +192,10 @@ public class Vehiculo implements Serializable{
 		this.columna = columna;
 	}	
 	
-
+	/**
+	 * Crea un nuevo Vehiculo
+	 * @param nombre
+	 */
 	public Vehiculo(String nombre) {
 		super();
 		armas= new ArrayList<Arma>();
@@ -232,32 +229,44 @@ public class Vehiculo implements Serializable{
 			Jugador enemigo,Esenario esenario, int indiceDeArma, int valorDelDado) {
 		try {
 			int ataque = vehiculoSeleccionado.getAtaque();
-			int defensaDelEnemigo= casillaEnemiga.getVehiculo().getDefensa();
+			int defensaDelEnemigo=getDefensaEnemigo( casillaEnemiga.getVehiculo());
 			int casillasDesplazado=Math.abs(casillaDelJuagador.getFila() - casillaEnemiga.getFila()) 
 					+Math.abs(casillaDelJuagador.getCol()-casillaEnemiga.getCol() -2);
 			int porcentajeRestanteAdicional=Math.abs(valorDelDado-4*casillasDesplazado);
 			int ataqueResultante = (int) ((ataque*porcentajeRestanteAdicional)/(100));
-			if(defensaDelEnemigo<ataqueResultante) {
-				casillaEnemiga.getVehiculo().setPuntosDeVida(getPuntosDeVida()-ataqueResultante);
-				JOptionPane.showMessageDialog(null, "El objetivo fue golpeado con un ataque de: " + String.valueOf(ataqueResultante));
-			}else {
-				JOptionPane.showMessageDialog(null, "No se concreto el ataque al objetivo porque su defensa era mayor");
+			if(casillaEnemiga.getVehiculo() != null){
+				if(defensaDelEnemigo<ataqueResultante) {
+					casillaEnemiga.getVehiculo().setPuntosDeVida(getPuntosDeVida()-ataqueResultante);
+					if(!casillaEnemiga.getVehiculo().isEstado())
+						vehiculoSeleccionado.setCantidadEnemigosDestruidos(vehiculoSeleccionado.getCantidadEnemigosDestruidos() +1);
+					JOptionPane.showMessageDialog(null, "El objetivo fue golpeado con un ataque de: " + String.valueOf(ataqueResultante));
+				}else {
+					JOptionPane.showMessageDialog(null, "No se concreto el ataque al objetivo porque su defensa era mayor");
+				}
 			}
-		if(casillaEnemiga instanceof Agua)
-			((Agua) casillaEnemiga).setVida(getPuntosDeVida()-ataqueResultante, casillaEnemiga);
-		if(casillaEnemiga instanceof Montania) 
-			((Montania) casillaEnemiga).setVida(getPuntosDeVida()-ataqueResultante,casillaEnemiga);
+			casillaEnemiga.evaluarVida(casillaEnemiga, ataqueResultante);
 		//evaluamos su vida y pasamos al siguiente turno 
 		if(new Jugador().estaVivo(enemigo)) {
 			esenario.setTurnoActivo(enemigo);
 			JOptionPane.showMessageDialog(null, "Siguiente turno");
 		}
-		if(! new Jugador().estaVivo(enemigo)) {//si el enemigo no esta vivo ejecutamos este codigo
+		if(!new Jugador().estaVivo(enemigo)) {//si el enemigo no esta vivo ejecutamos este codigo
 			  
 		}
-		
 		} catch (NullPointerException e) {
 			//no hacemos nada en caso de que no exista vehiculo en la casilla
+		} 
+	}
+	
+	@SuppressWarnings("finally")
+	private int getDefensaEnemigo(Vehiculo vehiculo ) {
+		int defensa=0;
+		try {
+			defensa = vehiculo.getDefensa();
+		} catch (Exception e) {
+			defensa =0;
+		} finally {
+			return defensa;
 		} 
 	}
 }

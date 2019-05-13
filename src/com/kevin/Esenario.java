@@ -82,6 +82,7 @@ public class Esenario extends JFrame {
 		this.tipoDeJuego=tipoDeJuego.getSelectedIndex();
 		this.tipoDeEsenario= tipoDeEsenario.getSelectedIndex();
 		this.esTurnoJugador1=new Random().nextBoolean();
+		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 1175, 762);
 		
@@ -205,6 +206,12 @@ public class Esenario extends JFrame {
 		panel.add(jugadorActivo);
 		
 		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				jugador1.actualizarVehiculos(jugador1,matriz);
+				jugador2.actualizarVehiculos(jugador2,matriz);
+			}
+		});
 		btnGuardar.setFont(new Font("Montserrat ExtraBold", Font.BOLD, 12));
 		btnGuardar.setForeground(Color.WHITE);
 		btnGuardar.setBackground(Color.DARK_GRAY);
@@ -396,6 +403,7 @@ public class Esenario extends JFrame {
 			if(!matriz2[x][y].tieneVehiculo) {
 				matriz2[x][y].setVehiculo((Vehiculo) jugador.getVehiculos().get(vehiculosFaltantes-1)); 
 				//se resta uno porque la indexacion comineza en 0. 
+				matriz2[x][y].setToolTipText(jugador.getNombre());
 				matriz2[x][y].setIcon(matriz[x][y].getVehiculo().getDefaultIcon());
 				asignarVehiculos(jugador,matriz2,  i,  j, vehiculosFaltantes-1);  
 			}

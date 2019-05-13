@@ -1,8 +1,10 @@
 package com.kevin;
 
 import java.awt.Color;
+import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 public class Casilla extends JButton{
 	
@@ -21,6 +23,8 @@ public class Casilla extends JButton{
 	protected boolean tieneVehiculo;
 	protected int fila;
 	protected int col;
+	
+	protected int vida;
 /**
  * 
  * @param tipo
@@ -75,6 +79,7 @@ public class Casilla extends JButton{
 	 * @return the fila
 	 */
 	public int getFila() {
+
 		return fila;
 	}
 	/**
@@ -96,4 +101,44 @@ public class Casilla extends JButton{
 		this.col = col;
 	}
 	
+	protected Casilla convertirEnTerreno(Casilla casilla) {
+		casilla = new Terreno(casilla.getFila(), casilla.getCol());
+		casilla.setBackground(Terreno.colorVerde);
+		casilla.setText("");
+		return casilla;
+	}
+	
+	/**
+	 * @return the vida
+	 */
+	public int getVida() {
+		return vida;
+	}
+	
+	/**
+	 * @param vida the vida to set
+	 */
+	public void setVida(int vida) {
+		if(vida<= 0) {
+			JOptionPane.showMessageDialog(null, "La casilla ha sido destruida");
+			this.vida=0;
+		}else {
+			this.vida = vida;
+		}
+	}
+	
+	protected int calcularVidaAleatoria() {
+		return new Random().nextInt(5); //rango entre 40 y 59
+	}
+	
+	void evaluarVida(Casilla casilla, int ataque) {
+		if(casilla instanceof Agua || casilla instanceof Montania) {
+			casilla.setVida(casilla.getVida()-ataque);
+			if(this.vida<=0) {
+				casilla= new Terreno(casilla.getFila(), casilla.getCol());
+				this.setBackground(Terreno.colorVerde);
+				this.setText("");
+			}
+		}
+	}
 }
